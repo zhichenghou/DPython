@@ -12,9 +12,9 @@ class Creator(object):
 class ConcreteCreator_1(Creator):
     """ a concret creator to implement factory method"""
     def create(self):
-        return ConcretProduct_1()
+        return ConcreteProduct_1()
 
 class ConcreteCreator_2(Creator):
     """ a concret creator to implement factory method"""
     def create(self):
-        return ConcretProduct_2()
+        return ConcreteProduct_2()

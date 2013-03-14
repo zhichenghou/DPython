@@ -7,15 +7,15 @@ class Product(object):
 
 # concret product
 
-class ConcretProduct_1(Product):
+class ConcreteProduct_1(Product):
     """a concret product class to implement common interfaces"""
     def operate(self):
-        print "operation implemented by ConcretProduct_1"
+        print "operation implemented by ConcreteProduct_1"
 
-class ConcretProduct_2(Product):
+class ConcreteProduct_2(Product):
     """a concret product class to implement common interfaces"""
     def operate(self):
-        print "operation implemented by ConcretProduct_2"
+        print "operation implemented by ConcreteProduct_2"
 
 # abstract creator
 
@@ -29,12 +29,12 @@ class Creator(object):
 class ConcreteCreator_1(Creator):
     """ a concret creator to implement factory method"""
     def create(self):
-        return ConcretProduct_1()
+        return ConcreteProduct_1()
 
 class ConcreteCreator_2(Creator):
     """ a concret creator to implement factory method"""
     def create(self):
-        return ConcretProduct_2()
+        return ConcreteProduct_2()
 
 # use factory method in client
 

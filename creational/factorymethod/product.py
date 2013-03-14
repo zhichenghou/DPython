@@ -7,12 +7,12 @@ class Product(object):
 
 # concret product
 
-class ConcretProduct_1(Product):
+class ConcreteProduct_1(Product):
     """a concret product class to implement common interfaces"""
     def operate(self):
-        print "operation implemented by ConcretProduct_1"
+        print "operation implemented by ConcreteProduct_1"
 
-class ConcretProduct_2(Product):
+class ConcreteProduct_2(Product):
     """a concret product class to implement common interfaces"""
     def operate(self):
-        print "operation implemented by ConcretProduct_2"
+        print "operation implemented by ConcreteProduct_2"
