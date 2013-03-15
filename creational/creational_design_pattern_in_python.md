@@ -167,7 +167,7 @@
 - 客户端（Client）：仅使用由抽象工厂和抽象产品声明的接口。
 
 ### 代码实现
-- 产品类
+- 产品类(`product.py`)
 
         # abstract product A
 
@@ -201,7 +201,7 @@
             def operate(self):
                 print "operate by ConcreteProductB2"
 
-- 工厂类
+- 工厂类(`factory.py`)
 
         from product import *
 
@@ -227,7 +227,7 @@
             def create_product_b(self):
                 return ConcreteProductB2()
 
-- 客户端
+- 客户端(`client.py`)
 
         import random
         from product import *
@@ -256,3 +256,194 @@
 ### 优缺点
 - 优点：该模式方便改变产品系列，只改变具体工厂就可以配置不同的产品系列。
 - 缺点：使用该模式增加新的产品时，由于抽象工厂定义了所有可生产产品的集合，因此需要更改所有工厂类以实现增加产品的目的，开销较大。
+
+-------------------------------------------------------------------------------
+
+## builder 模式
+
+### 定义
+生成器模式将一个复杂对象的创建过程与它的表示分离，使得同样的创建过程可以创建不同的表示。
+
+### 结构
+![UML图](builder/builder.png)
+
+### 参与者
+- 具体产品（Product）：被构造的具体产品，定义组成部件的类，由ConcreteBuilder调用接口进行具体装配。
+- 抽象生成器（Builder）：为创建具体产品对象的各个部件指定抽象接口。
+- 具体生成器（ConcreteBuilder）：定义抽象生成器的创建部件的接口，并提供一个检索具体产品的接口。
+- 指挥者（Director）：构建使用生成器接口的对象，定义构建的标准流程。
+
+### 代码实现
+- 产品类(`product.py`)
+
+        class Product(object):
+            def __init__(self):
+                self.parts = "I hava these parts: "
+
+            def add(self, part):
+                self.parts += part
+
+            def show(self):
+                print self.parts
+
+- 生成器类（`builder.py`）
+
+        from product import *
+
+        # abstract builder
+        class Builder(object):
+            def build_part_a(self):
+                pass
+            def build_part_b(self):
+                pass
+
+        # concrete builder
+        class ConcreteBuilder1(Builder):
+            def __init__(self):
+                self.product = Product()
+
+            def build_part_a(self):
+                self.product.add("1_part_a, ")
+
+            def build_part_b(self):
+                self.product.add("1_part_b, ")
+
+            def get_result(self):
+                return self.product
+
+        class ConcreteBuilder2(Builder):
+            def __init__(self):
+                self.product = Product()
+
+            def build_part_a(self):
+                self.product.add("2_part_a, ")
+
+            def build_part_b(self):
+                self.product.add("2_part_b, ")
+
+            def get_result(self):
+                return self.product
+
+- 指挥者类(`director.py`)
+
+        from builder import *
+
+        class Director(object):
+            def construct(self, builder):
+                builder.build_part_a()
+                builder.build_part_b()
+
+- 客户端(`client.py`)
+
+        from builder import *
+        from director import *
+
+        mydirector = Director()
+        mybuilder1 = ConcreteBuilder1()
+        mybuilder2 = ConcreteBuilder2()
+
+        mydirector.construct(mybuilder1)
+        mydirector.construct(mybuilder2)
+
+        prod1 = mybuilder1.get_result()
+        prod2 = mybuilder2.get_result()
+
+        prod1.show()
+        prod2.show()
+
+### 适用性
+该模式适用于当创建复杂对象的算法应该独立于该对象的组成部分以及它们的装配方式时，且允许被构造的对象有不同的表示时。它可以使构造代码与表示代码分离，通过传递不同的生成器可以改变不同的表示。相比于抽象工厂模式，二者均可建立复杂的产品对象，但侧重点不同，生成器模式侧重一步一步构造复杂产品，而抽象工厂则侧重多个系列产品（复杂或是简单的）对象的构造。
+
+-------------------------------------------------------------------------------
+
+## prototype 模式
+
+### 定义
+用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的对象。
+
+### 结构
+![UML图](prototype/prototype.png)
+
+### 参与者
+- 抽象原型（Prototype）：声明一个克隆自身的接口。
+- 具体原型（ConcretePrototype）：实现克隆自身的操作。
+- 客户端（Client）：让一个原型克隆自身返回一个新的对象。
+
+### 代码实现
+
+- 原型类（`prototype.py`）
+
+        import copy
+
+        # abstract prototype
+        class Prototype(object):
+            def clone(self):
+                pass
+
+        # concrete prototype
+        class ConcretePrototype1(Prototype):
+            def clone(self):
+                return copy.copy(self)
+
+        class ConcretePrototype2(Prototype):
+            def clone(self):
+                return copy.copy(self)
+
+- 客户端（`client.py`）
+
+        from prototype import *
+
+        p1 = ConcretePrototype1()
+        c1 = p1.clone()
+
+### 适用性
+该模式的优点在于可以从一个对象再创建另外一个可以定制的对象，且不需要知道具体的创建过程。可以实现运行时刻指定实例化类，此外还具有比手动创建所有实例更方便的优点。
+
+--------------------------------------------------------------------------------
+
+## singleton 模式
+
+### 定义
+保证一个类仅有一个实例，并提供一个访问它的全局访问点。
+
+### 结构
+![UML图](singleton/singleton.png)
+
+### 参与者
+- 单例类（Singleton）：定义一个get_instance方法，允许客户端访问它的唯一实例。
+
+### 代码实现
+- 单例类（`singleton.py`）
+
+        class Singleton(object):
+            instance = None
+
+            def __init__(self):
+                pass
+
+            @staticmethod
+            def get_instance():
+                if Singleton.instance is None:
+                    Singleton.instance = Singleton()
+
+                return Singleton.instance
+
+- 客户端（`client.py`）
+
+        from singleton import *
+
+        s1 = Singleton.get_instance()
+        s2 = Singleton.get_instance()
+
+        if s1 is s2:
+            print "in singleton pattern"
+
+### 适用性
+单例模式保证了类只有一个实例，且可以从一个众所周知的访问点访问它。
+
+--------------------------------------------------------------------
+
+### 参考
+- [设计模式-可复用面向对象软件的基础](http://book.douban.com/subject/1052241/) 
+- [大话设计模式](http://book.douban.com/subject/2334288/)
+- [Thinking in python](http://docs.linuxtone.org/ebooks/Python/Thinking_In_Python.pdf)
