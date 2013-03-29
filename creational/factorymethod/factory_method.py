@@ -37,5 +37,3 @@ class ConcreteCreator_2(Creator):
         return ConcreteProduct_2()
 
 # use factory method in client
-
-def 
